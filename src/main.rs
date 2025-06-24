@@ -9,7 +9,7 @@ fn main() {
         Ok(content) => {
             errors = extract_errors(content.as_str());
             // show them line by line
-            for error in errors {
+            for error in errors.as_slice() {
                 println!("{}", error);
             }
         }
@@ -23,12 +23,12 @@ fn main() {
     println!("Errors: {:?}", errors);
 }
 
-fn extract_errors(text: &str) -> Vec<&str> {
+fn extract_errors(text: &str) -> Vec<String> {
     let split_text = text.split("\n");
     let mut errors = vec![];
     for line in split_text {
         if line.starts_with("ERROR") {
-            errors.push(line);
+            errors.push(line.to_string());
         }
     }
     errors
