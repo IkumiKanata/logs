@@ -4,24 +4,34 @@ use std::{
 };
 
 fn main() {
-    let file_content = fs::read_to_string("logs.txt");
-    println!("{:#?}", file_content);
-
-    let result = divide(10.0, 0.0);
-    println!("{:#?}", result);
-
-    let result = divide(10.0, 2.0);
-    println!("{:#?}", result);
-
-    match valdidate_email("test@test.com") {
-        Ok(..) => println!("Email is valid"),
-        Err(e) => println!("Error: {}", e),
+    let mut errors = vec![];
+    match fs::read_to_string("logs.txt") {
+        Ok(content) => {
+            errors = extract_errors(content.as_str());
+            // show them line by line
+            for error in errors {
+                println!("{}", error);
+            }
+        }
+        Err(e) => {
+            println!("Error: {}", e);
+            if e.kind() == ErrorKind::NotFound {
+                println!("File not found");
+            }
+        }
     }
+    println!("Errors: {:?}", errors);
+}
 
-    match valdidate_email("testest") {
-        Ok(..) => println!("Email is valid"),
-        Err(e) => println!("Error: {}", e),
+fn extract_errors(text: &str) -> Vec<&str> {
+    let split_text = text.split("\n");
+    let mut errors = vec![];
+    for line in split_text {
+        if line.starts_with("ERROR") {
+            errors.push(line);
+        }
     }
+    errors
 }
 
 fn valdidate_email(email: &str) -> Result<(), Error> {
