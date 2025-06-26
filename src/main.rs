@@ -8,9 +8,12 @@ fn main() {
     match fs::read_to_string("logs.txt") {
         Ok(content) => {
             errors = extract_errors(content.as_str());
-            // show them line by line
             for error in errors.as_slice() {
                 println!("{}", error);
+            }
+            match fs::write("errors.txt", errors.join("\n")) {
+                Ok(_) => println!("Errors written to file"),
+                Err(e) => println!("Error writing to file: {}", e),
             }
         }
         Err(e) => {
