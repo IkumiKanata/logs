@@ -12,7 +12,7 @@ fn main() {
                 println!("{}", error);
             }
             match fs::write("errors.txt", errors.join("\n")) {
-                Ok(_) => println!("Errors written to file"),
+                Ok(..) => println!("Errors written to file"),
                 Err(e) => println!("Error writing to file: {}", e),
             }
         }
