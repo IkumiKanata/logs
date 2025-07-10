@@ -4,20 +4,23 @@ use std::{
 };
 
 fn main() {
-    match fs::read_to_string("logs.txt") {
-        Ok(content) => {
-            match fs::write("errors.txt", extract_errors(content.as_str()).join("\n")) {
-                Ok(..) => println!("Errors written to file"),
-                Err(e) => println!("Error writing to file: {}", e),
-            }
-        }
-        Err(e) => {
-            println!("Error: {}", e);
-            if e.kind() == ErrorKind::NotFound {
-                println!("File not found");
-            }
-        }
-    }
+    // match fs::read_to_string("logs.txt") {
+    //     Ok(content) => {
+    //         match fs::write("errors.txt", extract_errors(content.as_str()).join("\n")) {
+    //             Ok(..) => println!("Errors written to file"),
+    //             Err(e) => println!("Error writing to file: {}", e),
+    //         }
+    //     }
+    //     Err(e) => {
+    //         println!("Error: {}", e);
+    //         if e.kind() == ErrorKind::NotFound {
+    //             println!("File not found");
+    //         }
+    //     }
+    // }
+    let text = fs::read_to_string("logs.txt").expect("Failed to read file");
+    let error_logs = extract_errors(text.as_str());
+    fs::write("errors.txt", error_logs.join("\n")).expect("Failed to write to file");
 }
 
 fn extract_errors(text: &str) -> Vec<String> {
